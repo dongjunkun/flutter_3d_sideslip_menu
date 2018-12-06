@@ -4,7 +4,7 @@ A new Flutter application.
 
 ## 效果预览
 
-![3d_side_menu](/image/3d_side_menu.gif)
+![3d_side_menu](/images/3d_side_menu.gif)
 
 ## Getting Started
 
