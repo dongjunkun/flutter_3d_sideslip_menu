@@ -56,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     if (_sideAnimController.isCompleted) {
       return;
     }
-
     if (details.primaryVelocity > 1) {
       _sideAnimController.forward();
     } else if (details.primaryVelocity < -1) {
@@ -70,17 +69,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     }
   }
 
-  Animation<double> _scaleRect() {
-    return Tween<double>(begin: 1.8, end: 1).animate(_sideAnimController);
-  }
-
-  /* Animation<RelativeRect> _offsetRect() {
-    double width = MediaQuery.of(context).size.width;
-    return RelativeRectTween(
-            begin: RelativeRect.fromLTRB(0, 0, 0, 0),
-            end: RelativeRect.fromLTRB(width - 80, 0, 80 - width, 0))
-        .animate(_sideAnimController);
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +82,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             onHorizontalDragEnd: _onHorizontalDragEnd,
             child: Stack(
               children: <Widget>[
-                ScaleTransition(
-                  scale: _scaleRect(),
+                Transform.scale(
+                  alignment: Alignment.centerRight,
+                  scale: 1.5 - _sideAnimController.value*0.5,
                   child: Container(
                     height: height,
                     width: width,
@@ -108,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 Transform(
                   alignment: Alignment.center,
                   transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.008)
+                    ..setEntry(3, 2, 0.005)
                     ..translate(_sideAnimController.value * (width - 80), 0, 0)
                     ..rotateY(pi * _sideAnimController.value * 0.05)
                     ..scale(1 - _sideAnimController.value * 0.15),
