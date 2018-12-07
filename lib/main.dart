@@ -44,31 +44,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onHorizontalDragStart(DragStartDetails details) {}
-
-  void _onHorizontalDragUpdate(DragUpdateDetails details) {
-    if (_sideAnimController.isAnimating) return;
-    _sideAnimController.value += details.primaryDelta /
-        (MediaQuery.of(context).size.width ?? details.primaryDelta);
-  }
-
-  void _onHorizontalDragEnd(DragEndDetails details) {
-    if (_sideAnimController.isCompleted) {
-      return;
-    }
-    if (details.primaryVelocity > 1) {
-      _sideAnimController.forward();
-    } else if (details.primaryVelocity < -1) {
-      _sideAnimController.reverse();
-    } else {
-      if (_sideAnimController.value >= 0.5) {
-        _sideAnimController.forward();
-      } else {
-        _sideAnimController.reverse();
-      }
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +52,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
         body: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onHorizontalDragStart: _onHorizontalDragStart,
-            onHorizontalDragUpdate: _onHorizontalDragUpdate,
-            onHorizontalDragEnd: _onHorizontalDragEnd,
+            onHorizontalDragUpdate: (DragUpdateDetails details) {
+              if (_sideAnimController.isAnimating) return;
+              _sideAnimController.value += details.primaryDelta /
+                  (MediaQuery.of(context).size.width ?? details.primaryDelta);
+            },
+            onHorizontalDragEnd: (DragEndDetails details) {
+              if (_sideAnimController.isCompleted) {
+                return;
+              }
+              if (details.primaryVelocity > 1) {
+                _sideAnimController.forward();
+              } else if (details.primaryVelocity < -1) {
+                _sideAnimController.reverse();
+              } else {
+                if (_sideAnimController.value >= 0.5) {
+                  _sideAnimController.forward();
+                } else {
+                  _sideAnimController.reverse();
+                }
+              }
+            },
+            onScaleUpdate: (ScaleUpdateDetails details){
+            },
             child: Stack(
               children: <Widget>[
                 Transform.scale(
                   alignment: Alignment.centerRight,
-                  scale: 1.5 - _sideAnimController.value*0.5,
+                  scale: 1.5 - _sideAnimController.value * 0.5,
                   child: Container(
                     height: height,
                     width: width,
